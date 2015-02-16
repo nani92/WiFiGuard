@@ -18,4 +18,7 @@ What do we need?
 -service that will be work in background and waiting for actions with browser(apps)
 	*we should be able to turn on and off this service
 -how to get info about browser action?
+	*accordingg to this:
+	 http://stackoverflow.com/questions/11717805/how-to-check-if-the-android-default-browser-has-been-opened
+	 we can listen logs about browser
 -how to turn on/off WiFi?
