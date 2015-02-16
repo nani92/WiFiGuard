@@ -1,9 +1,12 @@
 package com.example.natalia.wifiguard;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ToggleButton;
 
 
 public class WiFiGuard extends ActionBarActivity {
@@ -35,5 +38,18 @@ public class WiFiGuard extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onGuardStateToggleClicked(View view) {
+        // Is the toggle on?
+        boolean on = ((ToggleButton) view).isChecked();
+        Intent serviceIntent = new Intent(this, MyService.class);
+        if (on) {
+            // CreateService
+            startService(serviceIntent);
+        } else {
+            // DestroyService
+            stopService(serviceIntent);
+        }
     }
 }
