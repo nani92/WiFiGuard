@@ -17,3 +17,5 @@ later: configurable list of apps that should turn on/off WiFi
 What do we need?
 -service that will be work in background and waiting for actions with browser(apps)
 	*we should be able to turn on and off this service
+-how to get info about browser action?
+-how to turn on/off WiFi?
