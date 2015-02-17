@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
-import android.os.Looper;
 import android.widget.Toast;
 
 import java.util.List;
@@ -38,20 +37,15 @@ public class MyService extends Service {
     public void onStart(Intent intent, int startId) {
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
 
-
-
         try {
             if (CheckIfBrowserIsAlreadyOn()) {
                 CheckIfBrowserIsSwitching(true) ;
-                //Wait and turn off WiFi
             } else {
                 CheckIfBrowserIsSwitching(false);
-                //turn on WiFi
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-
 
     }
 
@@ -83,9 +77,16 @@ public class MyService extends Service {
                     List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
                     for (int i = 0; i < procInfos.size(); i++) {
                         if (isSwitchedOn && !switched && CheckIfBrowserIsSwitchingOff(procInfos.get(i))) {
-                            isSwitchedOn = false;
-                            switched = true;
-                            wifiManager.setWifiEnabled(false);
+                            try {
+                                Thread.sleep(5000);
+                            } catch(InterruptedException ex) {
+                                Thread.currentThread().interrupt();
+                            }
+                            if(SwitchOffWiFi()){
+                                isSwitchedOn = false;
+                                switched = true;
+                            }
+
                     }
                         if(!isSwitchedOn && !switched && CheckIfBrowserIsSwitchingOn(procInfos.get(i))){
                             isSwitchedOn = true;
@@ -94,7 +95,6 @@ public class MyService extends Service {
                         }
                     }
                 }
-                //handler.post(this);
             };
 
 
@@ -116,5 +116,17 @@ public class MyService extends Service {
             return true;
         return false;
 
+    }
+
+    boolean SwitchOffWiFi(){
+        ActivityManager activityManager = (ActivityManager) this.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningAppProcessInfo> procInfos = activityManager.getRunningAppProcesses();
+        for (int i = 0; i < procInfos.size(); i++) {
+            if (CheckIfBrowserIsSwitchingOff(procInfos.get(i))) {
+                wifiManager.setWifiEnabled(false);
+                return true;
+            }
+        }
+        return false;
     }
 }
