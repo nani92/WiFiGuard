@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.os.Looper;
 import android.widget.Toast;
@@ -12,6 +13,7 @@ import java.util.List;
 import android.os.Handler;
 
 public class MyService extends Service {
+    WifiManager wifiManager;
     public MyService() {
     }
 
@@ -24,6 +26,7 @@ public class MyService extends Service {
     @Override
     public void onCreate() {
         Toast.makeText(this, "Service created", Toast.LENGTH_SHORT).show();
+        wifiManager = (WifiManager) this.getSystemService(Context.WIFI_SERVICE);
     }
 
     @Override
@@ -82,10 +85,12 @@ public class MyService extends Service {
                         if (isSwitchedOn && !switched && CheckIfBrowserIsSwitchingOff(procInfos.get(i))) {
                             isSwitchedOn = false;
                             switched = true;
+                            wifiManager.setWifiEnabled(false);
                     }
                         if(!isSwitchedOn && !switched && CheckIfBrowserIsSwitchingOn(procInfos.get(i))){
                             isSwitchedOn = true;
                             switched = true;
+                            wifiManager.setWifiEnabled(true);
                         }
                     }
                 }
