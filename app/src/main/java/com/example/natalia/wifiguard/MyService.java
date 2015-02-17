@@ -38,9 +38,10 @@ public class MyService extends Service {
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
 
         try {
-            if (CheckIfBrowserIsAlreadyOn()) {
+            if (CheckIfBrowserIsAlreadyOn())
                 CheckIfBrowserIsSwitching(true) ;
-            } else {
+            else {
+                wifiManager.setWifiEnabled(false);
                 CheckIfBrowserIsSwitching(false);
             }
         } catch (Exception e) {
